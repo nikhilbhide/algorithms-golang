@@ -12,45 +12,30 @@ import (
 func InorderTraversal(RootNode node.Node) [] string {
 	//variable to hold the traversed nodes
 	var traversalOrder [] string
-
 	//create a new list that is to be used as stack - last in first out
-	queue := list.New()
-	//push the root node to the stack
-	queue.PushFront(RootNode)
+	stack := list.New()
+	//mark current node to point to the root node
+	var currentNode *node.Node
+	currentNode =  &RootNode
 
-	//create a set of visited nodes. Initially it will be empty
-	visited := make(map[string]bool)
-
-	//loop until stack is empty
-	for ; queue.Len() != 0; {
-		//flag is used to understand whether to look for Right subnode
-		flag := 0
-		var currentNode node.Node
-
-		//just peek at the top of the stack
-		element := queue.Front()
-
-		//cast *Element to node.Node
-		currentNode = element.Value.(node.Node)
-
-		if (currentNode.Left != nil && !visited[strconv.Itoa((*currentNode.Left).Num)]) {
-			//push the Left element on stack and set the current node to Left node of the current node
-			queue.PushFront(*currentNode.Left)
-			currentNode = *currentNode.Left
+	//loop until stack is empty or current node is not nil
+	for ; (currentNode!=nil || stack.Len() != 0); {
+		if (currentNode!=nil) {
+			//push the current node on the stack
+			stack.PushFront(currentNode)
+			//make the current node to point to left child
+			currentNode = currentNode.Left
 		} else {
-			//either the Left node is null or its already visited
-			flag = 1
-			//add the current node to visited list
-			visited[strconv.Itoa(currentNode.Num)]=true
-			//add the current element to traversal order and remove the element from stack
+			//just peek at the top of the stack
+			element := stack.Front()
+			//remove the element from stack
+			stack.Remove(element)
+			//cast *Element to node.Node50
+			currentNode = element.Value.(*node.Node)
+			//add the current element to traversal order and remove the element from list
 			traversalOrder = append(traversalOrder, strconv.Itoa(currentNode.Num))
-			queue.Remove(element)
-		}
-
-		if (currentNode.Right != nil && flag==1) {
-			//push the Right element on stack and set the current node to Right node of the current node
-			queue.PushFront(*currentNode.Right)
-			currentNode = *currentNode.Right
+			//make current node to point to right of the current node
+			currentNode= currentNode.Right
 		}
 	}
 
@@ -62,35 +47,36 @@ Traverses the binary search tree in preorder traversal.
 Preorder traversal means visit current node then Left node and then Right node
  */
 func PreorderTraversal(RootNode node.Node) [] string {
+	//variable to hold the traversed nodes
 	var traversalOrder [] string
 
-	//create a new list that is to be used as stack - first in first out
-	//you add element to the rear side of queue and remove the element from front side
-	queue := list.New()
-	queue.PushBack(RootNode)
+	//create a new list that is to be used as stack - last in first out
+	stack := list.New()
+	//push the root node to the stack
+	stack.PushFront(RootNode)
 
-	//loop until queue is empty
-	for ; queue.Len() != 0; {
+	//loop until stack is empty
+	for ; stack.Len() != 0; {
+		//flag is used to understand whether to look for Right subnode
 		var currentNode node.Node
-
-		//get the element from the queue
-		element := queue.Front()
+		//just peek at the top of the stack
+		element := stack.Front()
+		stack.Remove(element)
+		//cast *Element to node.Node
 		currentNode = element.Value.(node.Node)
-		//remove the element from queue
-		queue.Remove(element)
-		//node is visited and add element to the traversal list
+		//add the current element to traversal order and remove the element from list
 		traversalOrder = append(traversalOrder, strconv.Itoa(currentNode.Num))
 
-		//visit Left node
-		if (currentNode.Left != nil) {
-			queue.PushBack(*currentNode.Left)
-		}
-		//visit Right node
 		if (currentNode.Right != nil) {
-			queue.PushBack(*currentNode.Right)
+			//push the Right element on stack and set the current node to Right node of the current node
+			stack.PushFront(*currentNode.Right)
+		}
+
+		if (currentNode.Left != nil) {
+			//push the Left element on stack and set the current node to Left node of the current node
+			stack.PushFront(*currentNode.Left)
 		}
 	}
-
 	return traversalOrder
 }
 
@@ -101,46 +87,36 @@ Postorder traversal means visit Left subtree, Right subtree and finally the root
 func PostorderTraversal(RootNode node.Node) [] string {
 	//variable to hold the traversed nodes
 	var traversalOrder [] string
-
-	//create a new list that is to be used as stack - last in first out
-	queue := list.New()
+	//stack to hold the visited nodes
+	traversalOrderStack:= list.New()
+	//create a new stack
+	stack := list.New()
 	//push the root node to the stack
-	queue.PushFront(RootNode)
-
-	//create a set of visited nodes. Initially it will be empty
-	visited := make(map[string]bool)
+	stack.PushFront(RootNode)
 
 	//loop until stack is empty
-	for ; queue.Len() != 0; {
-		//flag is used to understand whether to look for root node of the visited left and right subtrees
-		flag:=0
-
-		var currentNode node.Node
-		//just peek at the top of the stack
-		element := queue.Front()
+	for ; stack.Len() != 0; {
+		//just peek at the top of the list
+		element := stack.Front()
 		//cast *Element to node.Node
-		currentNode = element.Value.(node.Node)
-
-		if (currentNode.Left != nil && !visited[strconv.Itoa((currentNode.Left).Num)]) {
-			//push the Left element on stack and set the current node to Left node of the current node
-			queue.PushFront(*currentNode.Left)
-			currentNode = *currentNode.Left
-		} else if (currentNode.Right != nil && !visited[strconv.Itoa((currentNode.Right).Num)]) {
-			//push the Right element on stack and set the current node to Right node of the current node
-			queue.PushFront(*currentNode.Right)
-			currentNode = *currentNode.Right
-		} else {
-			flag = 1
+		currentNode:= element.Value.(node.Node)
+		traversalOrderStack.PushFront(strconv.Itoa(currentNode.Num))
+		stack.Remove(element)
+		if (currentNode.Left != nil) {
+			//push the Right element on stack
+			stack.PushFront(*currentNode.Left)
 		}
 
-		if(flag==1) {
-			//Left subtree and Right subtree of current node are visited
-			//add the current node to visited list
-			visited[strconv.Itoa(currentNode.Num)]=true
-			//add the current element to traversal order and remove the element from stack
-			traversalOrder = append(traversalOrder, strconv.Itoa(currentNode.Num))
-			queue.Remove(element)
+		if (currentNode.Right != nil) {
+			//add the Left element on stack
+			stack.PushFront(*currentNode.Right)
 		}
+	}
+
+	for ;traversalOrderStack.Len()!=0; {
+		element := traversalOrderStack.Front()
+		traversalOrder = append(traversalOrder,element.Value.(string))
+		traversalOrderStack.Remove(element)
 	}
 
 	return traversalOrder
