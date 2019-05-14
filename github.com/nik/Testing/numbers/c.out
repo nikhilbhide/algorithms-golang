@@ -1,0 +1,6 @@
+mode: set
+github.com/nik/Testing/testing/multiply.go:5.42,7.32 2 1
+github.com/nik/Testing/testing/multiply.go:12.2,12.16 1 1
+github.com/nik/Testing/testing/multiply.go:15.2,15.15 1 1
+github.com/nik/Testing/testing/multiply.go:7.32,10.3 1 1
+github.com/nik/Testing/testing/multiply.go:12.16,14.3 1 0
