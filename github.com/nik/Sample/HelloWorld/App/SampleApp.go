@@ -1,0 +1,4 @@
+package App
+
+func GetSampleApp () {
+}
