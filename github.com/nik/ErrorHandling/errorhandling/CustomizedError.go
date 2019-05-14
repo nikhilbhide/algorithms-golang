@@ -10,6 +10,7 @@ import (
 //system errors and logs
 var err = errors.New("Divide by zero error")
 
+//function to divide the number1 by number2
 func Divide (a int, b int) (float64, error) {
 	if b == 0 {
 		fmt.Printf("%T\n",err)
