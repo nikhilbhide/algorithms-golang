@@ -51,8 +51,6 @@ func main() {
 	//here we will have multiple partitions
 	topic := "paritionedtopic"
 
-	fmt.Printf("Created Producer %v\n", p)
-
 	// Optional delivery channel, if not specified the Producer object's
 	// .Events channel is used.
 	deliveryChan := make(chan kafka.Event)
