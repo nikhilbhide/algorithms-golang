@@ -36,7 +36,7 @@ func main() {
 
 	//name of the topic.
 	//here we will have multiple partitions
-	topic :="topic"
+	topic :="topic1"
 
 	fmt.Printf("Created Producer %v\n", p)
 

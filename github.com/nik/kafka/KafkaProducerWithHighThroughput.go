@@ -35,7 +35,7 @@ func main() {
 		"request.timeout.ms": 15000,
 		"enable.idempotence":"true",
 		"linger.ms":20,
-		"batch.size":32*1024,
+		"queue.buffering.max.kbytes":2097151,
 	})
 
 	if err != nil {
@@ -60,7 +60,7 @@ func main() {
 		//push a messaged onto the topic
 		//we are adding the key this time around
 		err = p.Produce(&kafka.Message{
-			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+			TopicPartition: kafka.TopicPartition{Topic: &topic, Partition:kafka.par},
 			Value:          []byte(value),
 			Key:            []byte(key),
 		}, deliveryChan)
