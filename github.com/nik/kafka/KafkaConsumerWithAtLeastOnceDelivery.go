@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"strconv"
 )
 
 //process the message
@@ -15,10 +14,6 @@ func processAtLeastOnce(consumer *kafka.Consumer, msg *kafka.Message, err error)
 		// The client will automatically try to recover from all errors.
 		fmt.Printf("Consumer error: %v (%v)\n", err, msg)
 	}
-
-	//we require unique id and we want to demonstrate the exactly once processing
-	uniqueId := *(msg.TopicPartition.Topic)+ strconv.Itoa(int(msg.TopicPartition.Partition)) + strconv.Itoa(int(msg.TopicPartition.Offset))
-	fmt.Println(uniqueId)
 
 	//processing is done for this consumer group and commit the offset
 	consumer.CommitMessage(msg)
