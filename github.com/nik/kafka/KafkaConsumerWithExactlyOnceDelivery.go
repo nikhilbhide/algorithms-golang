@@ -50,7 +50,7 @@ func main() {
 		msg, err := c.ReadMessage(-1)
 
 		//invoke go routine to process message
-		go processAtLeastOnce(c, msg, err)
+		go processExactlyOnce(c, msg, err)
 	}
 	c.Close()
 }
